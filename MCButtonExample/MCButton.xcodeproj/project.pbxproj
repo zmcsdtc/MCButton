@@ -17,6 +17,7 @@
 		904B916B25DF8A140067A2B5 /* MCButtonTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 904B916A25DF8A140067A2B5 /* MCButtonTests.m */; };
 		904B917625DF8A140067A2B5 /* MCButtonUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 904B917525DF8A140067A2B5 /* MCButtonUITests.m */; };
 		904B919225DF8BFA0067A2B5 /* MCButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 904B919125DF8BFA0067A2B5 /* MCButton.m */; };
+		90985BA225E78F0200017109 /* UIImage+Corner.m in Sources */ = {isa = PBXBuildFile; fileRef = 90985BA125E78F0200017109 /* UIImage+Corner.m */; };
 		BDCF2EFA8A065070B6A54BFF /* Pods_MCButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C680655CAB30E617C23E1F27 /* Pods_MCButton.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,8 @@
 		904B917725DF8A140067A2B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		904B919025DF8BFA0067A2B5 /* MCButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MCButton.h; sourceTree = "<group>"; };
 		904B919125DF8BFA0067A2B5 /* MCButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MCButton.m; sourceTree = "<group>"; };
+		90985BA025E78F0200017109 /* UIImage+Corner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Corner.h"; sourceTree = "<group>"; };
+		90985BA125E78F0200017109 /* UIImage+Corner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Corner.m"; sourceTree = "<group>"; };
 		C680655CAB30E617C23E1F27 /* Pods_MCButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MCButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9FFB00F114A3ACC3CB6E0A6 /* Pods-MCButton.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MCButton.debug.xcconfig"; path = "Target Support Files/Pods-MCButton/Pods-MCButton.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -114,6 +117,8 @@
 		904B914D25DF8A0A0067A2B5 /* MCButton */ = {
 			isa = PBXGroup;
 			children = (
+				90985BA025E78F0200017109 /* UIImage+Corner.h */,
+				90985BA125E78F0200017109 /* UIImage+Corner.m */,
 				904B919025DF8BFA0067A2B5 /* MCButton.h */,
 				904B919125DF8BFA0067A2B5 /* MCButton.m */,
 				904B914E25DF8A0B0067A2B5 /* AppDelegate.h */,
@@ -341,6 +346,7 @@
 			files = (
 				904B915625DF8A0B0067A2B5 /* ViewController.m in Sources */,
 				904B915025DF8A0B0067A2B5 /* AppDelegate.m in Sources */,
+				90985BA225E78F0200017109 /* UIImage+Corner.m in Sources */,
 				904B916125DF8A130067A2B5 /* main.m in Sources */,
 				904B919225DF8BFA0067A2B5 /* MCButton.m in Sources */,
 				904B915325DF8A0B0067A2B5 /* SceneDelegate.m in Sources */,

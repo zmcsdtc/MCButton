@@ -47,6 +47,8 @@ typedef void(^ClickButtonBlock)(void);
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage*)image title:(NSString*)title layoutStyle:(MCButtonLayoutStyle)layoutStyle marginOffset:(CGFloat)marginOffset clickButtonBlock:(ClickButtonBlock)block;
 
+- (void)addShadowLayerRadius:(CGFloat)radius color:(UIColor*)color corner:(CGFloat)corner;
+- (void)addCornerRadius:(CGFloat)radius;
 @end
 
 NS_ASSUME_NONNULL_END

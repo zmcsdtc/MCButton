@@ -9,8 +9,7 @@
 #define MAS_SHORTHAND
 #define MAS_SHORTHAND_GLOBALS
 #import "Masonry.h"
-
-
+#import "UIImage+Corner.h"
 @interface MCButton ()
 
 @property (strong,nonatomic) UIButton*bgButton;
@@ -236,7 +235,9 @@
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
-    self.bgButton.backgroundColor = backgroundColor;
+//    self.bgButton.backgroundColor = backgroundColor;
+    UIImage*bgImage = [UIImage mc_createImageWithColor:backgroundColor withSize:self.bgButton.bounds.size];
+    [self.bgButton setImage:bgImage forState:0];
 }
 
 -(void)setSpacing:(CGFloat)spacing{
@@ -249,15 +250,36 @@
     [self layoutSubviews];
 }
 
+
+#pragma mark - UI-Func
+
+- (void)addShadowLayerRadius:(CGFloat)radius color:(UIColor*)color corner:(CGFloat)corner{
+    CALayer *layer = [CALayer layer];
+    layer.name = @"shadow";
+    layer.frame = self.bgButton.frame;
+    layer.shadowOffset = CGSizeMake(0, 0);
+    layer.shadowColor = [color CGColor];
+    layer.shadowOpacity = 0.8;
+    layer.shadowRadius = 5;
+//    layer.cornerRadius = corner;
+    layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.bgButton.bounds.size.width, self.bgButton.bounds.size.height) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+    [self.layer insertSublayer:layer below:self.bgButton.layer];
+}
+
+- (void)addCornerRadius:(CGFloat)radius {
+//    UIImage*cornerBgImage = [self.bgButton.currentImage mc_CutImageWithCornerRadius:radius ofSize:self.bgButton.bounds.size];
+//    [self.bgButton setImage:cornerBgImage forState:0];
+    self.bgButton.imageView.layer.cornerRadius = radius;
+    self.bgButton.imageView.clipsToBounds = YES;
+}
+
 #pragma mark - lazy init
 
 - (UIButton *)bgButton {
     if (!_bgButton) {
         _bgButton = [[UIButton alloc] init];
         [self addSubview:_bgButton];
-        [_bgButton makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.bottom.top.offset(0);
-        }];
+        _bgButton.frame = self.bounds;
         
     }
     return _bgButton;
