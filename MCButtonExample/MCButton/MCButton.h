@@ -17,6 +17,8 @@ typedef NS_ENUM(NSInteger, MCButtonLayoutStyle) {
     MCButtonLayoutImageRight,
     MCButtonLayoutImageRightMargin,
     MCButtonLayoutImageLeftMargin,
+    MCButtonLayoutImageTopMargin,
+    MCButtonLayoutImageBottomMargin,
 };
 
 typedef NS_ENUM(NSInteger, MCButtonShadowSide) {

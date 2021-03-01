@@ -75,11 +75,11 @@
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image title:(nonnull NSString *)title layoutStyle:(MCButtonLayoutStyle)layoutStyle marginOffset:(CGFloat)marginOffset clickButtonBlock:(nonnull ClickButtonBlock)block {
     if (self = [super initWithFrame:frame]) {
         [self setupDefaultSet];
+        self.marginOffset = marginOffset;
         self.title = title;
         self.buttonImageView.image = image;
         self.norImage = image;
         self.layoutStyle = layoutStyle;
-        self.marginOffset = marginOffset;
         [self.bgButton addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
         self.clickButtonBlock = block;
         
@@ -106,11 +106,15 @@
     switch (self.layoutStyle) {
         case MCButtonLayoutNormal:
         {
+            //仅图片
             if ([self isBlankString:self.title]) {
                 [self.buttonImageView makeConstraints:^(MASConstraintMaker *make) {
                     make.centerY.centerX.offset(0);
+                    make.height.lessThanOrEqualTo(self.bounds.size.height);
+                    make.width.lessThanOrEqualTo(self.bounds.size.width);
                 }];
             }
+            //仅文字
             else {
                 [self.titleLabel makeConstraints:^(MASConstraintMaker *make) {
                     make.centerY.centerX.offset(0);
@@ -189,6 +193,30 @@
             [self.buttonImageView updateConstraints:^(MASConstraintMaker *make) {
                 make.right.offset(-self.marginOffset);
                 make.centerY.offset(0);
+            }];
+        }
+            break;
+        case MCButtonLayoutImageTopMargin:
+        {
+            [self.buttonImageView updateConstraints:^(MASConstraintMaker *make) {
+                make.top.offset(self.marginOffset);
+                make.centerX.offset(0);
+            }];
+            [self.titleLabel updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.offset(-self.marginOffset);
+                make.centerX.offset(0);
+            }];
+        }
+            break;
+        case MCButtonLayoutImageBottomMargin:
+        {
+            [self.titleLabel updateConstraints:^(MASConstraintMaker *make) {
+                make.top.offset(self.marginOffset);
+                make.centerX.offset(0);
+            }];
+            [self.buttonImageView updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.offset(-self.marginOffset);
+                make.centerX.offset(0);
             }];
         }
             break;

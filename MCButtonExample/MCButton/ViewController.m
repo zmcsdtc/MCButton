@@ -26,6 +26,12 @@
     [self.view addSubview:mcbtn];
     [mcbtn addShadowLayerRadius:2 color:[UIColor blackColor] corner:0 shadowSide:MCButtonShadowLeftSide];
     
+    MCButton*mcbtn9 = [[MCButton alloc] initWithFrame:CGRectMake(250, 100, 100, 40) image:[UIImage imageNamed:@"check"] clickButtonBlock:^{
+        NSLog(@"按钮标题");
+    }];
+    mcbtn9.backgroundColor = [UIColor cyanColor];
+    [self.view addSubview:mcbtn9];
+    
    __block MCButton*mcbtn1 = [[MCButton alloc] initWithFrame:CGRectMake(50, 200, 100, 40) image:[UIImage imageNamed:@"level_unselected"] clickButtonBlock:^{
         NSLog(@"按钮标题");
         if (mcbtn1.select) {
@@ -87,6 +93,12 @@
     [btn4 addCornerRadius:30];
     [btn4 addShadowLayerRadius:10 color:[UIColor blackColor] corner:30 shadowSide:MCButtonShadowAllSide];
     
+    MCButton*mcbtn8 = [[MCButton alloc] initWithFrame:CGRectMake(250, 550, 150, 100) image:[UIImage imageNamed:@"level_unselected"] title:@"上黑" layoutStyle:MCButtonLayoutImageTopMargin marginOffset:15 clickButtonBlock:^{
+        NSLog(@"按钮标题");
+    }];
+    mcbtn8.backgroundColor = [UIColor cyanColor];
+    [self.view addSubview:mcbtn8];
+
     MCButton*btn5 = [[MCButton alloc] initWithFrame:CGRectMake(200, 400, 150, 100) image:[UIImage imageNamed:@"level_unselected"] title:@"离屏渲染" layoutStyle:MCButtonLayoutImageLeft spacing:20 clickButtonBlock:^{
         
     }];
