@@ -10,6 +10,8 @@
 #define MAS_SHORTHAND_GLOBALS
 #import "Masonry.h"
 #import "UIImage+Corner.h"
+
+#import "UIImageView+WebCache.h"
 @interface MCButton ()
 
 @property (strong,nonatomic) UIButton*bgButton;
@@ -342,6 +344,11 @@
     
     [self.bgButton setImage:bgImage forState:0];
 }
+
+
+#pragma mark - net load
+
+
 
 #pragma mark - lazy init
 

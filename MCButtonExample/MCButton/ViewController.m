@@ -109,6 +109,7 @@
     [self.view addSubview:btn7];
     [btn7 setGradientColors:@[[UIColor redColor],[UIColor blueColor]] startPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 1)];
     [btn7 addCornerRadius:20];
+    
 }
 
 
