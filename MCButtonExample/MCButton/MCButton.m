@@ -19,29 +19,25 @@
 @property (copy,  nonatomic) ClickButtonBlock clickButtonBlock;
 
 @property (assign,nonatomic) CGFloat marginOffset;
+@property (strong,nonatomic) UIImage*norImage;
 
 @end
 
 @implementation MCButton
 
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self == [super initWithFrame:frame]) {
-        [self setupDefaultSet];
-    }
-    return self;
-}
-
 - (void)setupDefaultSet {
     self.titleColor = [UIColor blackColor];
     self.font = [UIFont systemFontOfSize:15];
-    self.layoutStyle = MCButtonLayoutNormal;
+    self.norBackgroundColor = [UIColor whiteColor];
+    self.select = NO;
 }
 
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image clickButtonBlock:(ClickButtonBlock)block {
-    if (self == [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
+        [self setupDefaultSet];
         self.buttonImageView.image = image;
+        self.norImage = image;
         [self.bgButton addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
         self.clickButtonBlock = block;
     }
@@ -49,7 +45,8 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame title:(NSString *)title clickButtonBlock:(ClickButtonBlock)block {
-    if (self == [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
+        [self setupDefaultSet];
         self.title = title;
         [self.bgButton addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
         self.clickButtonBlock = block;
@@ -58,9 +55,12 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image title:(nonnull NSString *)title layoutStyle:(MCButtonLayoutStyle)layoutStyle spacing:(CGFloat)spacing clickButtonBlock:(nonnull ClickButtonBlock)block {
-    if (self == [super initWithFrame:frame]) {
+
+    if (self = [super initWithFrame:frame]) {
+        [self setupDefaultSet];
         self.title = title;
         self.buttonImageView.image = image;
+        self.norImage = image;
         self.layoutStyle = layoutStyle;
         self.spacing = spacing;
         [self.bgButton addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
@@ -71,9 +71,11 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image title:(nonnull NSString *)title layoutStyle:(MCButtonLayoutStyle)layoutStyle marginOffset:(CGFloat)marginOffset clickButtonBlock:(nonnull ClickButtonBlock)block {
-    if (self == [super initWithFrame:frame]) {
+    if (self = [super initWithFrame:frame]) {
+        [self setupDefaultSet];
         self.title = title;
         self.buttonImageView.image = image;
+        self.norImage = image;
         self.layoutStyle = layoutStyle;
         self.marginOffset = marginOffset;
         [self.bgButton addTarget:self action:@selector(click:) forControlEvents:UIControlEventTouchUpInside];
@@ -95,7 +97,9 @@
     
     CGSize textSize = [self.titleLabel.text boundingRectWithSize:CGSizeMake( CGFLOAT_MAX,CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:textfont context:nil].size;
     
-    CGFloat marginOffset = (self.frame.size.width - self.buttonImageView.image.size.width - self.spacing - textSize.width)/2.0;
+    
+    
+    CGFloat ImageTextmarginOffset = (self.frame.size.width - self.buttonImageView.image.size.width - self.spacing - textSize.width)/2.0;
     
     switch (self.layoutStyle) {
         case MCButtonLayoutNormal:
@@ -140,11 +144,11 @@
         {
             
             [self.buttonImageView updateConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(marginOffset);
+                make.left.offset(ImageTextmarginOffset);
                 make.centerY.offset(0);
             }];
             [self.titleLabel updateConstraints:^(MASConstraintMaker *make) {
-                make.right.offset(-marginOffset);
+                make.right.offset(-ImageTextmarginOffset);
                 make.centerY.offset(0);
             }];
         }
@@ -152,11 +156,11 @@
         case MCButtonLayoutImageRight:
         {
             [self.titleLabel updateConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(marginOffset);
+                make.left.offset(ImageTextmarginOffset);
                 make.centerY.offset(0);
             }];
             [self.buttonImageView updateConstraints:^(MASConstraintMaker *make) {
-                make.right.offset(-marginOffset);
+                make.right.offset(-ImageTextmarginOffset);
                 make.centerY.offset(0);
             }];
             
@@ -189,14 +193,12 @@
         default:
             break;
     }
+    [self layoutIfNeeded];
+    NSLog(@"buttonImageView.frame = %@",NSStringFromCGRect(self.buttonImageView.frame));
 }
 
 
 - (void)click:(UIButton*)btn {
-    
-    //如果有设置selImage或者selBgcolor
-    
-    
     if (self.clickButtonBlock) {
         self.clickButtonBlock();
     }
@@ -220,24 +222,16 @@
     self.titleLabel.textColor = titleColor;
 }
 
-- (void)setNorImage:(UIImage *)norImage {
-    _norImage = norImage;
-    if (self.bgButton.state == UIControlStateNormal) {
-        self.buttonImageView.image = norImage;
-    }
-}
-
-- (void)setSelImage:(UIImage *)selImage {
-    _selImage = selImage;
-    if (self.bgButton.state == UIControlStateSelected) {
-        self.buttonImageView.image = selImage;
-    }
-}
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor {
-//    self.bgButton.backgroundColor = backgroundColor;
     UIImage*bgImage = [UIImage mc_createImageWithColor:backgroundColor withSize:self.bgButton.bounds.size];
     [self.bgButton setImage:bgImage forState:0];
+}
+
+
+- (void)setNorBackgroundColor:(UIColor *)norBackgroundColor {
+    _norBackgroundColor = norBackgroundColor;
+    self.backgroundColor = norBackgroundColor;
 }
 
 -(void)setSpacing:(CGFloat)spacing{
@@ -250,19 +244,71 @@
     [self layoutSubviews];
 }
 
+- (void)setSelect:(BOOL)select {
+    _select = select;
+    if (select) {
+        //
+        if (self.selectBackGroundColor) {
+            self.backgroundColor = self.selectBackGroundColor;
+        }
+        if (self.selectImage) {
+            self.buttonImageView.image = self.selectImage;
+        }
+        
+    }
+    else {
+        if (self.norBackgroundColor) {
+            self.backgroundColor = self.norBackgroundColor;
+        }
+        if (self.norImage) {
+            self.buttonImageView.image = self.norImage;
+        }
+    }
+}
+
 
 #pragma mark - UI-Func
 
-- (void)addShadowLayerRadius:(CGFloat)radius color:(UIColor*)color corner:(CGFloat)corner{
+- (void)addShadowLayerRadius:(CGFloat)radius color:(UIColor*)color corner:(CGFloat)corner shadowSide:(MCButtonShadowSide)side{
     CALayer *layer = [CALayer layer];
     layer.name = @"shadow";
     layer.frame = self.bgButton.frame;
-    layer.shadowOffset = CGSizeMake(0, 0);
+    layer.shadowOffset = CGSizeMake(0,0);
     layer.shadowColor = [color CGColor];
     layer.shadowOpacity = 0.8;
-    layer.shadowRadius = 5;
-//    layer.cornerRadius = corner;
-    layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.bgButton.bounds.size.width, self.bgButton.bounds.size.height) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+    layer.shadowRadius = radius;
+    switch (side) {
+        case MCButtonShadowAllSide:
+        {
+            layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, self.bgButton.bounds.size.width, self.bgButton.bounds.size.height) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+        }
+            break;
+        case MCButtonShadowTopSide:
+        {
+            layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(radius/2.0, -radius, self.bgButton.bounds.size.width-radius, self.bgButton.bounds.size.height) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+        }
+            break;
+        case MCButtonShadowBottomSide:
+        {
+            layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(radius/2.0, radius, self.bgButton.bounds.size.width-radius, self.bgButton.bounds.size.height) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+        }
+            break;
+            
+        case MCButtonShadowLeftSide:
+        {
+            layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(-radius, radius/2.0, self.bgButton.bounds.size.width, self.bgButton.bounds.size.height-radius) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+        }
+            break;
+        case MCButtonShadowRightSide:
+        {
+            layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(radius, radius/2.0, self.bgButton.bounds.size.width, self.bgButton.bounds.size.height-radius) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(corner, corner)].CGPath;
+        }
+            break;
+            
+        default:
+            break;
+    }
+
     [self.layer insertSublayer:layer below:self.bgButton.layer];
 }
 
@@ -270,7 +316,31 @@
 //    UIImage*cornerBgImage = [self.bgButton.currentImage mc_CutImageWithCornerRadius:radius ofSize:self.bgButton.bounds.size];
 //    [self.bgButton setImage:cornerBgImage forState:0];
     self.bgButton.imageView.layer.cornerRadius = radius;
+
     self.bgButton.imageView.clipsToBounds = YES;
+}
+
+
+
+
+- (void)setGradientColors:(NSArray *)colors startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint {
+    UIImage*bgImage;
+    if (startPoint.x == endPoint.x&&endPoint.y > startPoint.x) {
+        bgImage = [UIImage mc_gradientColorImageFromColors:colors gradientType:GradientTypeTopToBottom imgSize:self.bgButton.bounds.size];
+    }
+    else if (startPoint.x < endPoint.x&&startPoint.y == endPoint.y) {
+        bgImage = [UIImage mc_gradientColorImageFromColors:colors gradientType:GradientTypeLeftToRight imgSize:self.bgButton.bounds.size];
+    }
+    
+    else if (startPoint.x < endPoint.x && startPoint.y < endPoint.y) {
+        bgImage = [UIImage mc_gradientColorImageFromColors:colors gradientType:GradientTypeUpleftToLowright imgSize:self.bgButton.bounds.size];
+    }
+    
+    else {
+        bgImage = [UIImage mc_gradientColorImageFromColors:colors gradientType:GradientTypeUprightToLowleft imgSize:self.bgButton.bounds.size];
+    }
+    
+    [self.bgButton setImage:bgImage forState:0];
 }
 
 #pragma mark - lazy init
